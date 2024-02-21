@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -19,20 +20,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
-    #[ORM\Column]
-    private array $roles = [];
-
-    /**
-     * @var string The hashed password
-     */
-    #[ORM\Column]
-    private ?string $password = null;
-
     #[ORM\Column(length: 60)]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 85)]
     private ?string $lastName = null;
+
+    #[ORM\Column(type:'json')]
+
+    private array $roles = [];
+   
+   
+//private $plainPassword;
+//private ?string $plainPassword = null;
+
+    #[ORM\Column]
+    private ?string $password = null;
+
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $dateCreation = null;
 
     public function getId(): ?int
     {
@@ -50,7 +57,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    public function setFirstName(string $firstName): static
+    {
+        $this->firstName = $firstName;
 
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): static
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
     /**
      * A visual identifier that represents this user.
      *
@@ -67,9 +97,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
+
+        // Vérifie si $roles est un tableau
+        if (!is_array($roles)) {
+            // Si ce n'est pas un tableau, initialiser $roles comme un tableau vide
+            $roles = [];
+        }
+
+        // Ajoute le rôle ROLE_USER à $roles
         $roles[] = 'ROLE_USER';
 
+        // Utilise array_unique pour s'assurer qu'il n'y a pas de doublons
         return array_unique($roles);
     }
 
@@ -103,28 +141,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
+  
 
-    public function getFirstName(): ?string
-    {
-        return $this->firstName;
-    }
-
-    public function setFirstName(string $firstName): static
-    {
-        $this->firstName = $firstName;
-
-        return $this;
-    }
-
-    public function getLastName(): ?string
-    {
-        return $this->lastName;
-    }
-
-    public function setLastName(string $lastName): static
-    {
-        $this->lastName = $lastName;
-
-        return $this;
-    }
+    
 }

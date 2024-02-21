@@ -1,3 +1,23 @@
+:root {
+--pink: #ff5964;
+
+--dark-blue: #38618c;
+
+--white-blue: #35a7ff;
+
+--green: #01ff19;
+
+--white: #ffffff;
+
+
+}
+
+
+
+
+
+
 body {
     background-color: skyblue;
+
 }
