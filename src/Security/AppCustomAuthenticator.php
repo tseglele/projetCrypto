@@ -36,7 +36,7 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
             new UserBadge($email),
             new PasswordCredentials($request->request->get('password', '')),
             [
-                new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
+                new CsrfTokenBadge('authenticate', $request->request->get('app_user_index')),
                 new RememberMeBadge(),
             ]
         );
@@ -44,13 +44,18 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
-            return new RedirectResponse($targetPath);
+        $user = $token->getUser();
+        //l'utilisation
+        if (in_array(['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'], $user->getRoles())) {
+            return new RedirectResponse($this->urlGenerator->generate('app_user_index'));
+        } elseif (in_array('ROLE_USER', $user->getRoles())) {
+            return new RedirectResponse($this->urlGenerator->generate('app_wallet'));
+        } else {
+            return new RedirectResponse($this->urlGenerator->generate('app_home'));
         }
-
         // For example:
         // return new RedirectResponse($this->urlGenerator->generate('some_route'));
-        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        throw new \Exception('TODO: provide a valid redirect inside ' . __FILE__);
     }
 
     protected function getLoginUrl(Request $request): string

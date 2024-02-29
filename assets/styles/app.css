@@ -21,7 +21,9 @@
     .bg-pink {
         background-color: var(--pink);
     }
-    
+    .border-pink{
+        border-color: var(--pink) ;
+    }
     /* Bleu foncé */
     .dark-blue {
         color: var(--dark-blue);

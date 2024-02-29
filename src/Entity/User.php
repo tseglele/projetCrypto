@@ -28,13 +28,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 85)]
     private ?string $lastName = null;
 
-    #[ORM\Column(type:'json')]
+    #[ORM\Column(type: 'json')]
 
     private array $roles = [];
-   
-   
-//private $plainPassword;
-//private ?string $plainPassword = null;
+
+
+    //private $plainPassword;
+    //private ?string $plainPassword = null;
 
     #[ORM\Column]
     private ?string $password = null;
@@ -143,7 +143,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
-  
+    // Méthode getter pour dateCreation
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->dateCreation;
+    }
 
-    
+    // Méthode setter pour dateCreation
+    public function setDateCreation(?\DateTimeInterface $dateCreation): static
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
 }

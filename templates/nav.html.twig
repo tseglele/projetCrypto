@@ -6,11 +6,13 @@
       </a>
      
       <div class="navbar-nav justify-content-end">
-     
-         <a class="btn btn-outline-info" href="{{ path('app_login') }}">Log in</a>
-
+         {% if app.user %}
+             <a class="btn btn-outline-info" href="{{ path('app_logout') }}">Log out</a>
+         {% else %}
+             <a class="btn btn-outline-info" href="{{ path('app_login') }}">Log in</a>
+         {% endif %}
       </div>
     
   </div>
 </nav>
-{%endblock%}
+{% endblock %}
